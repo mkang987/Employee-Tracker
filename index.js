@@ -1,6 +1,5 @@
 const { prompt } = require('inquirer');
 const mysql = require('mysql2');
-require("console.table");
 const logo = require("asciiart-logo");
 
 
@@ -175,7 +174,7 @@ function addEmployee() {
         },
         {
             name: "manager",
-            message: "what is their manager ID#?(Leave blank if none)"
+            message: "what is their manager ID#?"
         }
     ])
     .then(res => {
@@ -190,5 +189,25 @@ function addEmployee() {
 }
 
 function updateEmployee() {
+    prompt([
+        {
+            name: 'employee',
+            message: 'Which employees role do you want to update?(Input employee ID#)'
+        },
+        {
+            name: 'role',
+            message: 'What is the employees new role?(Input role ID#)'
+        }
+    ])
+    .then(res => {
+        const updateQuery = `UPDATE employee SET role_id = "${res.employee}" WHERE id = "${res.role}"`;
 
+        connection.query(updateQuery, (err) => {
+            if(err) throw err;
+            console.log("Employee role updated!");
+            viewEmployees();
+        })
+
+        }
+    )
 }
