@@ -86,11 +86,18 @@ function loadPrompts() {
 }
 
 function viewDepartments() {
+    const dept = `SELECT department.id AS ID, department.name AS Department FROM department`;
 
+    connection.query(dept, (err,res) => {
+        if(err) throw err;
+        console.table(res);
+        loadPrompts();
+    });
 }
 
 function viewRoles() {
-
+    const roles = `SELECT role.id AS ID, role.title AS Job_Title, role.salary AS Salary, department.name AS Department FROM role
+    INNER JOIN department ON role.department_id = department.id`;
 }
 
 function viewEmployees() {
