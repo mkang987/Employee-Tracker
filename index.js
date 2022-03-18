@@ -107,18 +107,85 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-
+    const empQuery = `SELECT employee.id AS ID, employee.first_name AS First_Name, employee.last_name AS Last_Name, role.title AS Job_Title, department.name AS Department, role.salary AS Salary, employee.manager_id FROM employee JOIN role ON role.id = employee.role_id JOIN department ON role.department_id = department.id ORDER BY employee.id`;
+    
+    connection.query(empQuery, (err,res) => {
+        if(err) throw err;
+        console.table(res);
+        loadPrompts();
+    });
 }
 
 function addDepartment() {
-
+    prompt([
+        {
+            name: "name",
+            message: "Which department would you like to add?"
+        }
+    ])
+    .then(res => {
+        let newDept = res.name;
+        const addQuery =`INSERT INTO department (name) VALUES ("${newDept}")`;
+        connection.query(addQuery, newDept, (err) => {
+            if(err) throw err;
+            console.log("New department added!");
+            viewDepartments();
+        })
+    })
 }
 
 function addRole() {
-
+    prompt([
+        {
+            name: "role",
+            message: "What role would you like to add?"
+        },
+        {
+            name: "salary",
+            message: "What is the salary?"
+        },
+        {
+            name: "department",
+            message: "Which department ID does it belong to?"
+        },
+    ])
+    .then(res => {
+        const addQuery =`INSERT INTO role (title, salary, department_id) VALUES ('${res.role}', '${res.salary}', '${res.department}')`;
+        connection.query(addQuery, (err) => {
+            if(err) throw err;
+            console.log("New role added!");
+            viewRoles();
+        })
+    })
 }
 
 function addEmployee() {
+    prompt([
+        {
+            name: "first",
+            message: "What new employee's first name?"
+        },
+        {
+            name: "last",
+            message: "What new employee's last name?"
+        },
+        {
+            name: "role",
+            message: "Which role ID do they belong to?"
+        },
+        {
+            name: "manager",
+            message: "what is their manager ID#?(Leave blank if none)"
+        }
+    ])
+    .then(res => {
+        const addQuery =`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${res.first}', '${res.last}', '${res.role}', '${res.manager}')`;
+        connection.query(addQuery, (err) => {
+            if(err) throw err;
+            console.log("New employee added!");
+            viewEmployees();
+        })
+    })
 
 }
 
