@@ -2,7 +2,7 @@
 
 ## Description
 
-A quick command line application created to help manage an employee database
+A quick command line application created to help manage an employee database using NODE and MYSQL queries.
 
 ## Demo Link
 
